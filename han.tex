@@ -1,0 +1,96 @@
+\documentclass{article}
+
+\usepackage[nohead, nomarginpar, margin=1in, foot=.25in]{geometry}
+
+\usepackage{fontspec}
+\newfontfamily\contrastfont[Path=\string./fonts/]{arial-narrow-bold.ttf}
+\setmainfont[Path=\string./fonts/]{arial.ttf}
+
+% Setup citations
+\usepackage{apacite}
+\bibliographystyle{apacite}
+
+\usepackage[dutch]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{titling}
+
+
+\usepackage[table]{xcolor}
+\definecolor{LinkUnderlineColor}{HTML}{1155cc}
+\definecolor{LinkColor}{HTML}{1155cc}
+\definecolor{ContrastColor}{HTML}{e50056}
+
+
+% Remove dots from toc
+\usepackage[titles]{tocloft}
+\renewcommand{\cftdot}{}
+
+% Toc title styling
+\AtBeginDocument{
+  \let\mtcontentsname\contentsname
+  \renewcommand\contentsname{\MakeUppercase\mtcontentsname}
+}
+
+% Title styling
+\usepackage{titlesec}
+\titleformat{\section}
+	{\contrastfont\fontsize{16}{12}\upshape\bfseries\uppercase}{\thesection}{1.1em}{}
+\titleformat{\subsection}
+	{\color{ContrastColor}\contrastfont\fontsize{12}{12}\upshape\bfseries\uppercase}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}
+	{\contrastfont\fontsize{12}{12}\upshape\bfseries\uppercase}{\thesubsubsection}{1em}{}
+
+% Hyper ref
+\usepackage[colorlinks=true,allcolors=LinkColor,allbordercolors=LinkUnderlineColor]{hyperref}
+\hypersetup{
+	$if(title-meta)$
+	  pdftitle={$title-meta$},
+	$endif$
+	$if(author-meta)$
+	  pdfauthor={$author-meta$},
+	$endif$
+	$if(subject)$
+	  pdfsubject={$subject$},
+	$endif$
+	$if(keywords)$
+	  pdfkeywords={$for(keywords)$$keywords$$sep$, $endfor$},
+	$endif$
+	$if(subject)$
+	pdfsubject={$subject$},
+	$endif$
+	$if(subject)$
+	pdfsubject={$subject$},
+	$endif$
+	pdfcreator={XeLaTeX via HAN-theme by Nathan},
+}
+
+$if(title)$
+\title{{\contrastfont\fontsize{24}{12}\upshape\bfseries $title$ \\
+\normalfont Test}}
+
+\renewcommand\maketitlehooka{\null\mbox{}\vfill}
+\renewcommand\maketitlehookd{\vfill\null}
+
+\pretitle{\begin{flushleft}\Large\bfseries}
+\posttitle{\par\end{flushleft}}
+
+$endif$
+$for(author)$
+  \author{$author$}
+$endfor$
+
+\begin{document}
+
+$if(title)$
+\begin{titlingpage}
+\maketitle
+\end{titlingpage}
+$endif$
+
+$if(toc)$
+\tableofcontents
+\newpage
+$endif$
+
+$body$
+\end{document}
