@@ -1,6 +1,6 @@
 \documentclass{article}
 
-\usepackage[nohead, nomarginpar, margin=1in, foot=.25in]{geometry}
+\usepackage[nomarginpar, margin=1in, foot=.25in]{geometry}
 
 \usepackage{fontspec}
 \newfontfamily\contrastfont[Path=\string./fonts/]{arial-narrow-bold.ttf}
@@ -19,7 +19,11 @@
 \definecolor{LinkUnderlineColor}{HTML}{1155cc}
 \definecolor{LinkColor}{HTML}{1155cc}
 \definecolor{ContrastColor}{HTML}{e50056}
+\definecolor{AccentColor}{HTML}{808080}
 
+\usepackage{graphicx}
+\usepackage{svg}
+\usepackage{eso-pic}
 
 % Remove dots from toc
 \usepackage[titles]{tocloft}
@@ -30,6 +34,21 @@
   \let\mtcontentsname\contentsname
   \renewcommand\contentsname{\MakeUppercase\mtcontentsname}
 }
+
+% Page headers and footers
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyfoot{} % Remove the page number from the center. This line must be before lfoot and rfoot.
+\lhead{This is my name}
+\rhead{this is page \thepage}
+\rfoot{\thepage}
+
+$if(title)$
+\lfoot{
+	$if(title)$\fontsize{8pt}{10pt}\normalfont\uppercase{$title$}$endif$
+}
+$endif$
+
 
 % Title styling
 \usepackage{titlesec}
@@ -49,48 +68,76 @@
 	$if(author-meta)$
 	  pdfauthor={$author-meta$},
 	$endif$
-	$if(subject)$
-	  pdfsubject={$subject$},
-	$endif$
 	$if(keywords)$
 	  pdfkeywords={$for(keywords)$$keywords$$sep$, $endfor$},
 	$endif$
 	$if(subject)$
 	pdfsubject={$subject$},
 	$endif$
-	$if(subject)$
-	pdfsubject={$subject$},
-	$endif$
-	pdfcreator={XeLaTeX via HAN-theme by Nathan},
+	pdfcreator={XeLaTeX via Pandoc; HAN-theme by Nathan Kolpa},
 }
 
 $if(title)$
-\title{{\contrastfont\fontsize{24}{12}\upshape\bfseries $title$ \\
-\normalfont Test}}
+\title{
+	{\contrastfont\fontsize{24pt}{12pt}\upshape\bfseries $title$} \fontsize{25pt}{12pt}\normalfont\textcolor{ContrastColor}{\_}
+	\\
+	$if(subject)$ \fontsize{18pt}{30pt}\normalfont\textcolor{AccentColor}{$subject$}$endif$
+}
+
 
 \renewcommand\maketitlehooka{\null\mbox{}\vfill}
-\renewcommand\maketitlehookd{\vfill\null}
+\renewcommand\maketitlehookd{}
 
 \pretitle{\begin{flushleft}\Large\bfseries}
-\posttitle{\par\end{flushleft}}
+\posttitle{\par\end{flushleft}\vfill\null}
+
+\preauthor{\begin{flushleft}}
+\postauthor{\end{flushleft}}
+
+\predate{\begin{flushleft}}
+\postdate{\end{flushleft}}
 
 $endif$
-$for(author)$
-  \author{$author$}
-$endfor$
+
+\date{
+	\fontsize{12pt}{12pt}\normalfont\textcolor{AccentColor}{
+		$if(date)$
+			$date$
+		$else$
+			\today
+		$endif$
+	}
+}
+
+$if(author-meta)$
+\author{
+	\fontsize{12pt}{12pt}\normalfont\textcolor{AccentColor}{$author-meta$ }
+}
+$endif$
 
 \begin{document}
 
-$if(title)$
-\begin{titlingpage}
-\maketitle
-\end{titlingpage}
-$endif$
+	$if(title)$
+	\begin{titlingpage}
 
-$if(toc)$
-\tableofcontents
-\newpage
-$endif$
+		\AddToShipoutPictureBG*{
+			\AtPageUpperLeft{
+				\raisebox{-\dimexpr\height+\topskip+1in}{
+					\hspace*{1in}
+					\includesvg[width=0.6\textwidth]{./assets/han_logo}
+				}
+			}
+		}
 
-$body$
+		\maketitle
+
+	\end{titlingpage}
+	$endif$
+
+	$if(toc)$
+	\tableofcontents
+	\newpage
+	$endif$
+
+	$body$
 \end{document}

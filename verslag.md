@@ -1,9 +1,10 @@
 ---
-title: Mijn Verslag
-subject: Hello World
-keywords: ["Hello", "World"]
+title: Een mooie titel
+subject: Onderwerp
+keywords: ["ICT", "UML"]
 author:
-  - "John Doe"
+  - "Bob"
+  - "Alice"
 toc: true
 ---
 
